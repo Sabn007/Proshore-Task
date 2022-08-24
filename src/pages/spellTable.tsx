@@ -103,6 +103,9 @@ function ListTable() {
     newArr.push(favName);
     localStorage.setItem("newArr", JSON.stringify(newArr));
   };
+
+
+  
   const favList: any = localStorage.getItem("newArr");
   console.log(JSON.parse(favList));
 
