@@ -7,6 +7,8 @@ import DynamicSearch from "../component/search";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { GetSpellList, GetSpells } from "../actions/actions";
+import { GrView } from "react-icons/gr";
+import { AiFillHeart } from "react-icons/ai";
 
 function ListTable() {
   // const [spellDetails, setSpellDetails] = useState<any>("");
@@ -16,10 +18,8 @@ function ListTable() {
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
-  const [show1, setShow1] = useState(false);
 
-  const handleShow1 = () => setShow1(true);
-
+  const navigate = useNavigate();
   const rowsPerPage = [10, 20, 50, 100];
   const [metaData, setMetaData] = useState({
     current_page: 1,
@@ -61,14 +61,16 @@ function ListTable() {
               setUrl(row?.url);
               handleShow();
             }}
+            title="View Spell"
           >
-            View
+            <GrView color="white" />
           </div>
           <div
             className="btn btn-success mx-2"
             onClick={() => addToFav(row?.name)}
+            title="Add to favourite"
           >
-            Fav
+            <AiFillHeart color="red" />
           </div>
         </div>
       ),
@@ -89,9 +91,7 @@ function ListTable() {
   const handleClose = () => {
     setShow(false);
   };
-  const handleClose1 = () => {
-    setShow1(false);
-  };
+
   const filterData =
     SpellList &&
     SpellList?.data.filter((data: any) => {
@@ -104,22 +104,29 @@ function ListTable() {
     localStorage.setItem("newArr", JSON.stringify(newArr));
   };
 
-
-  
-  const favList: any = localStorage.getItem("newArr");
-  console.log(JSON.parse(favList));
-
   return (
     <div className="container border border-rounded p-5 my-5">
-      <h1>Dungeons and Dragons</h1>
-      <DynamicSearch
-        data={searchField}
-        onchange={(e: any) => {
-          onchange(e);
-        }}
-        handleReset={() => setSearchField("")}
-      />
-      <div onClick={() => handleShow1()}>View Fav List</div>
+      <h1>Dungeons and Dragons Spells</h1>
+      <div className="d-flex row justify-content-between">
+        <div className=" col-6">
+          <DynamicSearch
+            data={searchField}
+            onchange={(e: any) => {
+              onchange(e);
+            }}
+            handleReset={() => setSearchField("")}
+          />
+        </div>
+        <div className="col-6 cursor-pointer">
+          <button
+            className="ms-5 btn btn-success"
+            onClick={() => navigate("/fav-table")}
+          >
+            {" "}
+            View Fav List
+          </button>
+        </div>
+      </div>
       <div className="">
         <DataTable
           columns={columns}
@@ -143,50 +150,12 @@ function ListTable() {
           }
         />
       </div>
-      <Modal
-        show={show1}
-        onHide={handleClose1}
-        animation={false}
-        centered
-        size="lg"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Favourite Spells List</Modal.Title>
-        </Modal.Header>
-        {favList ? (
-          <Modal.Body>
-            
-              <div>
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">S.N.</th>
-                      <th scope="col"> Name</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {JSON.parse(favList)?.map((item: any,idx:number) => (
-                      <tr key={item.id}>
-                        <td>{idx}</td>
-                        <td>{item}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            
-          </Modal.Body>
-        ) : (
-          <div className="">
-            <div>Loading...</div>
-          </div>
-        )}
-      </Modal>
+
       <Modal
         show={show}
         onHide={handleClose}
         animation={false}
-        fullscreen
+        centered
         size="lg"
       >
         <Modal.Header closeButton>
@@ -194,15 +163,32 @@ function ListTable() {
         </Modal.Header>
         {spellDetails ? (
           <Modal.Body>
-            <div>
+            <div className="border border-rounded p-3">
               <div>{spellDetails?.desc}</div>
 
-              <div>
-                <div> Attack Type : {spellDetails?.attack_type}</div>
-                <div>level: {spellDetails?.level}</div>
-                <div>Range : {spellDetails?.range}</div>
-                <div>Attack Type : {spellDetails?.attack_type}</div>
-                <div>Duration : {spellDetails?.duration}</div>
+              <div className="mt-2">
+                <div>
+                  {" "}
+                  <span className="text-danger">Attack Type</span> :{" "}
+                  {spellDetails?.attack_type}
+                </div>
+                <div>
+                  <span className="text-danger">level</span>:{" "}
+                  {spellDetails?.level}
+                </div>
+                <div>
+                  <span className="text-danger">Range</span> :{" "}
+                  {spellDetails?.range}
+                </div>
+                
+                <div>
+                  <span className="text-danger">Duration</span> :{" "}
+                  {spellDetails?.duration}
+                </div>
+                <div>
+                  <span className="text-danger">Material </span>:{" "}
+                  {spellDetails?.material}
+                </div>
               </div>
             </div>
           </Modal.Body>
