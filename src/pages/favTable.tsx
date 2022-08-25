@@ -2,7 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function FavTable() {
-  const favList: any = localStorage.getItem("newArr");
+  const favList: any = localStorage.getItem("favList");
+  const filterDuplicate = JSON.parse(favList)?.filter(
+    (item: any, index: number) => favList.indexOf(item) === index
+  );
+  console.log(filterDuplicate)
   const navigate = useNavigate();
 
   return (

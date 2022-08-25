@@ -45,7 +45,7 @@ function ListTable() {
     {
       name: "Spells Name",
       selector: (row: any) => (
-        <span className={`${newArr?.includes(row?.name) ? "bg-success" : ""}`}>
+        <span className={`${favList?.includes(row?.name) ? "bg-success" : ""}`}>
           {row?.name}
         </span>
       ),
@@ -97,18 +97,19 @@ function ListTable() {
     SpellList?.data.filter((data: any) => {
       return data.name.toLowerCase().includes(searchField.toLowerCase());
     });
-  const newArr: any = [];
+
+  const favList: any = [];
   const addToFav = (favName: string) => {
     toast.success(` ${favName} added to favourite`);
-    newArr.push(favName);
-    localStorage.setItem("newArr", JSON.stringify(newArr));
+
+    localStorage.setItem("favList", JSON.stringify(favList.push(favName)));
   };
 
   return (
     <div className="container border border-rounded p-5 my-5">
       <h1>Dungeons and Dragons Spells</h1>
       <div className="d-flex row justify-content-between">
-        <div className=" col-6">
+        <div className=" col-12">
           <DynamicSearch
             data={searchField}
             onchange={(e: any) => {
@@ -117,7 +118,7 @@ function ListTable() {
             handleReset={() => setSearchField("")}
           />
         </div>
-        <div className="col-6 cursor-pointer">
+        {/* <div className="col-6 cursor-pointer">
           <button
             className="ms-5 btn btn-success"
             onClick={() => navigate("/fav-table")}
@@ -125,7 +126,7 @@ function ListTable() {
             {" "}
             View Fav List
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="">
         <DataTable
@@ -140,14 +141,6 @@ function ListTable() {
           }
           paginationPerPage={metaData.perPage}
           paginationRowsPerPageOptions={rowsPerPage}
-          progressComponent={
-            <div className="p-5 m-5">
-              <div
-                className="spinner-border text-success d-flex align-items-center justify-content-center "
-                role="status"
-              ></div>
-            </div>
-          }
         />
       </div>
 
@@ -180,7 +173,7 @@ function ListTable() {
                   <span className="text-danger">Range</span> :{" "}
                   {spellDetails?.range}
                 </div>
-                
+
                 <div>
                   <span className="text-danger">Duration</span> :{" "}
                   {spellDetails?.duration}
